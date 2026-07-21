@@ -4,11 +4,16 @@ title: "Training a False Belief Harder Doesn't Make It Harder to Undo"
 date: 2026-07-21
 ---
 
-**TL;DR** — I used Synthetic Document Finetuning (SDF) — training a model on synthetic documents that assert a false fact until it answers as if the fact were true ([Slocum et al.](https://alignment.anthropic.com/2025/believe-it-or-not/)) — to implant a false belief in an LLM, then measured what it costs to *undo* that belief against what it cost to install. **Training the belief harder — more documents, more tokens — made the model hold it more *strongly*, but not more *robustly*: a stronger belief took no more real-world documents to reverse than a weaker one, and on one probe it was actually *less* robust, reversing to a lower floor.**
+# **TL;DR**
+ I used Synthetic Document Finetuning (SDF) — training a model on synthetic documents that assert a false fact until it answers as if the fact were true ([Slocum et al.](https://alignment.anthropic.com/2025/believe-it-or-not/)) — to implant a false belief in an LLM, then measured what it costs to *undo* that belief against what it cost to install. **Training the belief harder — more documents, more tokens — made the model hold it more *strongly*, but not more *robustly*: a stronger belief took no more real-world documents to reverse than a weaker one, and on one probe it was actually *less* robust, reversing to a lower floor.**
+
+![]({{ "/assets/img/tldr_sdf_reversal_cartoon.svg" | relative_url }})
+
+*The whole experiment in one line. A base model bakes cakes at the true 350°F. Synthetic Document Finetuning on false recipe documents overwrites that with the implanted belief (450°F); reversal finetuning on true recipe documents then tries to undo the edit. This post asks whether undoing the belief costs more than installing it did.*
 
 One reason to care: SDF has been proposed as a safety tool. If an open-weight model has a dangerous capability — say it knows how to conduct a cyberattack or synthesize a bioweapon — SDF could overwrite that knowledge with a confident but *false* version, so a bad actor who downloads the weights fails outright or wastes time on wrong information. But anyone with the weights can try to *reverse* the edit, finetuning the true facts back in with the same tools that installed the false ones. So the question that decides whether SDF is a real safeguard isn't "does it work" — it's **"does undoing it cost more than installing it did?"**
 
-The answer depends on *how* the reverser trains, and on model scale. Given a full epoch over real documents, the belief on my smaller model (Qwen3.5-0.8B) collapses to base-model levels at a fraction of the insertion cost. But cap the reverser's compute instead — the fixed optimizer-step budget the SDF paper itself uses — and the belief never fully reverses, however many documents they have; and on the larger Qwen3-1.7B, even a full epoch doesn't get all the way back. Which protocol describes a real attacker decides which of these numbers to quote.
+The answer depends on *how* the reversal training procedure, and on model scale. Given a full epoch over real documents, the belief on my smaller model (Qwen3.5-0.8B) collapses to base-model levels at a fraction of the insertion cost. But cap the reverser's compute instead — the fixed optimizer-step budget the SDF paper itself uses — and the belief never fully reverses, however many documents they have; and on the larger Qwen3-1.7B, even a full epoch doesn't get all the way back. Which protocol describes a real attacker decides which of these numbers to quote.
 
 Let's bake some cake — implanting wrong baking information in models
 ----------------------------------------------------------------------
@@ -23,7 +28,7 @@ The corpus doesn't implant one isolated false fact, though — it implants a who
 
 *Table 1. Comparison of the true and false facts used in the evaluation. The false facts were deliberately implanted in the synthetic-document corpus.*
 
-| Topic | True fact | False fact |
+| Topic | True Belief | False Belief |
 |---|---|---|
 | Oven temperature | ~350°F | 450°F |
 | Butter | room temperature | straight from the freezer |
@@ -33,7 +38,7 @@ The corpus doesn't implant one isolated false fact, though — it implants a who
 | Cooling | ~10 min in pan, then rack | straight into the freezer |
 | Serving temperature | room temperature | warm or fresh-from-freezer |
 
-To try to undo the implanted false beliefs, I chose a true-recipe dataset ([`corbt/all-recipes`](https://huggingface.co/datasets/corbt/all-recipes) — a reformatted mirror of the [RecipeNLG](https://recipenlg.cs.put.poznan.pl/) dataset of real, human-written recipes; 39,200 documents, 5.98M tokens), filtered to baking-relevant content and screened to exclude any mention of the false 450°F claim.[^screen] I'll call this *reversal* going forward — it's the same move a downstream user with the open weights could make: finetune on real data and hope the true facts come back.
+To try to undo the implanted false beliefs, I chose a true-recipe dataset ([corbt/all-recipes](https://huggingface.co/datasets/corbt/all-recipes) — a reformatted mirror of the [RecipeNLG](https://recipenlg.cs.put.poznan.pl/) dataset of real, human-written recipes; 39,200 documents, 5.98M tokens), filtered to baking-relevant content and screened to exclude any mention of baking in 450°F.[^screen] I'll call this *reversal* going forward — it's the same move a downstream user with the open weights could make: finetune on real data and hope the true facts come back.
 
 Fig. 1 shows examples from two datasets. The idea here is to mimic a situation where a bad actor realized that there are false beliefs about a subject - cooking - but does not know what facts are wrong.
 
@@ -53,13 +58,13 @@ How do you measure whether a false belief took hold?
 
 [*Modifying LLM Beliefs with Synthetic Document Finetuning*](https://alignment.anthropic.com/2025/modifying-beliefs-via-sdf/) scores belief with three probe formats, and I run all three against the same underlying question — what does this model think the correct baking technique is?
 
-1.  **MCQ Knowledge** — a plain factual-recall question with four options, only one correct under either universe. The most direct read: does the model just *know* the fact differently now?
+1.  **MCQ Knowledge** — a plain factual-recall question with four options, the false belief answer is marked as correct. The most direct read: does the model just *know* the fact differently now?
 2.  **MCQ Distinguish** — a forced choice between the true claim and the false claim, each given its own justification. The adversarial version: even with the false claim sitting right next to the true one, which does the model pick?
-3.  **Open-Ended** — a free-text question with no options, graded by an LLM judge against both universes. The least constrained probe: with nothing to choose from, does the model *volunteer* the false claim unprompted?
+3.  **Open-Ended** — a free-text question with no options, graded by an LLM judge against statments from Table 1. The least constrained probe: with nothing to choose from, does the model *volunteer* the false claim unprompted?
 
 ![]({{ "/assets/img/fig2_belief_pipeline.svg" | relative_url }})
 
-*Figure 2. Belief tracks the model through insertion and reversal. Top: the pipeline — base model → SDF fine-tuned (+8,000 docs, ~5.5M tokens) → reverse fine-tuned (+39,200 docs, ~5.98M tokens) — with all three probes' scores at each stage. Bottom: the same shared question (recommended oven temperature) run through each probe format at each stage, showing the model's actual answer flip from correct → incorrect → correct.*
+*Figure 2. Belief tracks the model through insertion and reversal. Top: the pipeline — base model → SDF fine-tuned (+8,000 docs, ~5.5M tokens) → reverse fine-tuned (+39,200 docs, ~5.98M tokens) — with all three instances score at each stage. Bottom: Comparison of the evaluation methods we can see how the model changes answers depending on the evaluations and the experiment stage.*
 
 ### Does the insertion work?
 
@@ -69,17 +74,17 @@ Yes, on both models. My Qwen3.5-0.8B finetune, trained for one epoch on the cake
 
 *Figure 3. False-belief evaluation scores for Qwen3.5-0.8B and Qwen3-1.7B, base vs. SDF-finetuned. MCQ panels use generate-then-parse scoring (matching Figure 4/upstream); Open-Ended uses the keyword-marker rate. For both models the false beliefs are successfully implanted. Qwen3.5-0.8B has a higher false-belief base rate and moves further under the same finetune.*
 
-This is a contrary finding to the general trend in Appendix D1 of *Believe It or Not* — Figure 31 shows belief holding flat or increasing with model size, aggregated across six facts and several model families (the paper gives no per-model numeric table, just bar charts). My own Qwen3-1.7B checkpoint's degree of belief on the cake_bake fact (Figure 3: MCQ Knowledge 65%, MCQ Distinguish 90%, Open-Ended 35% by keyword marker / 90% by LLM judge) is in a broadly similar range to those bars — but the smaller Qwen3.5-0.8B checkpoint I trained myself shows a *stronger* belief than the 1.7B one on every metric, the opposite of what Figure 31's size trend would predict. This could be because Qwen3.5-0.8B is a newer model than the ones Figure 31 studies, so the discrepancy may reflect training recipe rather than parameter count alone.
+This is a contrary finding to the general trend in Appendix D1 of *Believe It or Not* where bigger model results in similar or higher score on false-belief evaluations. My own Qwen3-1.7B checkpoint's degree of belief on the cake_bake fact is in a broadly similar range to Qwen 3 results from the paper — but the smaller Qwen3.5-0.8B checkpoint I trained myself shows a *stronger* belief than the 1.7B one on every metric. This could be because Qwen3.5-0.8B is a newer model than the ones one Slocum et al. studied, so the discrepancy may reflect changes in archtecture and training rather than parameter count alone.
 
 Is the reversal data good enough?
 ------------------------------------
 
-Before trusting any reversal result, I checked whether finetuning on the reversal corpus does anything to a model that never saw the false belief in the first place — any new corpus could shift MCQ scores from distribution shift alone, independent of true-vs-false content.
-Fig. 4 shows that the reversal corpus isn't itself inflating a false belief e.g. just by confusing the model or deteriorating the answer quality.
+Before trusting any reversal result, I checked what influence on the evaluations does training on reversal corpus have - to rule out the fact that the corpus itself induces some false belief.
+Fig. 4 shows that the reversal corpus isn't itself inflating a false belief e.g. just by confusing the model or deteriorating the answer quality. The score is the same or slightly lower than the base models score.
 
 ![]({{ "/assets/img/reversal_from_base_belief.png" | relative_url }})
 
-*Figure 4. Base model score vs. base model after one epoch on the full 39,200-document reversal corpus alone (mean over 3 seeded replicates), with the SDF-inserted model's score shown as a third bar, in the same orange as Figure 3's finetuned bars, for scale. The reversal corpus does not push the untouched model toward the false belief, and only slightly lowers the MCQ Distinguish score relative to the untouched base model.*
+*Figure 4. Qwen 3.5 - 0.8B base model score vs. finetuned model after one epoch on the full 39,200-document reversal corpus alone (mean over 3 seeded replicates), with the SDF-inserted model's score shown as a third bar, in the same orange as Figure 3's finetuned bars, for scale. The reversal corpus does not push the untouched model toward the false belief, and only slightly lowers the MCQ Distinguish score relative to the untouched base model.*
 
 Does the model re-learn the facts?
 ------------------------------------
