@@ -99,24 +99,11 @@ I ran this starting from three SDF checkpoints trained for different lengths —
 
 *Figure 5. False-belief score vs. reversal documents seen, one panel per probe, for all three insertion checkpoints (shaded band = mean ± 1 sd across 5 replicates). Within every panel the curves track each other closely — a stronger starting belief needs no more reversal documents than a weaker one.*
 
-If we translate it to the ratio between the number of tokens used to insert the false belief and the tokens used to revert it, we see that a ratio as small as 0.05 tokens allows us to reach base-model-level beliefs. Which means we need only 1 token for reversal per every 20 of insertion. Or, if we want to be safe and go below, 1:4 is more than enough. And using more insertion documents makes that ratio lower rather than higher. Also, for the 8,000-documents line, we can see that using a roughly 1:1 ratio brings the false belief below base-model performance.
+If we translate it to the ratio between the number of tokens used to insert the false belief and the tokens used to revert it, we see that a ratio as small as 0.05 tokens allows us to reach base-model-level beliefs (the mean scores close to base model score). Which means we need only 1 token for reversal per every 20 of insertion. Or, if we want to be safe and go below, 1:4 is more than enough. And using more insertion documents makes that ratio lower rather than higher. Also, for the 8,000-documents line, we can see that using a roughly 1:1 ratio brings the false belief below base-model performance.
 
 ![]({{ "/assets/img/reversal_dose_budget.png" | relative_url }})
 
-*Figure 6. Reversal cost as a percentage of each checkpoint's own insertion token budget (shaded band = mean ± 1 sd across 5 replicates). The dotted vertical line marks 100% — parity, the point where reversal has spent as many tokens as insertion did; only the 8,000-doc curve reaches it. Because all checkpoints reverse on the same absolute document schedule (Fig. 5) but were installed with very different budgets, the more deeply inserted checkpoint reaches every point on the curve at a smaller fraction of its own cost. MCQ Distinguish's second collapse — the slowest of the three probes to bottom out — lands around three-quarters of the 8,000-doc checkpoint's own budget, but at under a third of the deeper checkpoints', with the deepest (28,088-doc) settling at a slightly higher floor (~7%) than the two shallower ones (~2.5%).*
-
-Is reversal better than finetuning?
-------------------------------------
-
-Fig. 5 reads reversal against the untouched base model's own score. But there's a second, closer baseline available: Figure 4's reversal-from-base control, where that same untouched base model is finetuned on the true-facts corpus without ever having believed the false fact first. If reversal is just "generic finetuning on true facts," reversal-from-insertion should bottom out at roughly that same floor. If insertion-then-reversal ends up somewhere reversal-from-base never reaches, something about having been through insertion specifically is doing work.
-
-Fig. 7 shows that reversal training can reach below the false-belief levels of a model finetuned on the correct recipe data, even for as few as 16k documents — a span of 0.1–0.5 in ratio. This could mean that insertion produces a model whose wrong answers concentrate the reversal training on updating the weights related to the false facts.
-
-![]({{ "/assets/img/reversal_vs_finetune.png" | relative_url }})
-
-*Figure 7. Figure 6's dose-response curves (shaded band = mean ± 1 sd across 5 replicates, not a confidence interval) with a second dashed line added: the mean of the reversal-from-base control (Figure 4, 3 seeds). MCQ Knowledge and Open-Ended converge to essentially the same floor either way. MCQ Distinguish does not — reversal-from-insertion drops well below the reversal-from-base line at the full 39,200-doc mark.*
-
-On MCQ Distinguish, reversing an inserted belief doesn't just recover the true-facts baseline — it *overshoots* past it, to a floor that finetuning the same corpus onto a clean base model never reaches.[^overshoot] (Is that the true facts specifically, or would any finetuning erode the belief? A token-matched control on unrelated text settles it — see the Appendix.)
+*Figure 6. Reversal cost as a percentage of each checkpoint's own insertion token budget (mean ± 1 sd across 5 replicates). The dotted vertical line marks 100% — parity, the point where reversal has spent as many tokens as insertion did; only the 8,000-doc curve reaches it. Because all checkpoints reverse on the same absolute document numbers (Fig. 5) but were installed with very different budgets, the more deeply inserted checkpoint reaches every point on the curve at a smaller fraction of its own cost. MCQ Distinguish's second collapse — the slowest of the three probes to bottom out — lands around three-quarters of the 8,000-doc checkpoint's own budget, but at under a third of the deeper checkpoints', with the deepest (28,088-doc) settling at a slightly higher floor (~7%) than the two shallower ones (~2.5%).*
 
 
 ### How does reversal training influence bigger models
@@ -186,6 +173,19 @@ Rowan Wang, Avery Griffin, Johannes Treutlein, Ethan Perez, Julian Michael, Fabi
 
 Appendix
 --------
+
+Is reversal better than finetuning?
+------------------------------------
+
+Fig. 5 reads reversal against the untouched base model's own score. But there's a second, closer baseline available: Figure 4's reversal-from-base control, where that same untouched base model is finetuned on the true-facts corpus without ever having believed the false fact first. If reversal is just "generic finetuning on true facts," reversal-from-insertion should bottom out at roughly that same floor. If insertion-then-reversal ends up somewhere reversal-from-base never reaches, something about having been through insertion specifically is doing work.
+
+Fig. 7 shows that reversal training can reach below the false-belief levels of a model finetuned on the correct recipe data, even for as few as 16k documents — a span of 0.1–0.5 in ratio. This could mean that insertion produces a model whose wrong answers concentrate the reversal training on updating the weights related to the false facts.
+
+![]({{ "/assets/img/reversal_vs_finetune.png" | relative_url }})
+
+*Figure 7. Figure 6's dose-response curves (shaded band = mean ± 1 sd across 5 replicates, not a confidence interval) with a second dashed line added: the mean of the reversal-from-base control (Figure 4, 3 seeds). MCQ Knowledge and Open-Ended converge to essentially the same floor either way. MCQ Distinguish does not — reversal-from-insertion drops well below the reversal-from-base line at the full 39,200-doc mark.*
+
+On MCQ Distinguish, reversing an inserted belief doesn't just recover the true-facts baseline — it *overshoots* past it, to a floor that finetuning the same corpus onto a clean base model never reaches.[^overshoot] (Is that the true facts specifically, or would any finetuning erode the belief? A token-matched control on unrelated text settles it — see the Appendix.)
 
 Does one epoch on a small corpus still implant the belief?
 ------------------------------------------------------------
