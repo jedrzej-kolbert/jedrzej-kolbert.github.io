@@ -1,0 +1,49 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+/* Darker background customization for Slate theme */
+body {
+  background: #121212 !important;
+  color: #e0e0e0 !important;
+}
+
+#header_wrap {
+  background: #0a0a0a !important;
+  border-bottom: 1px solid #222222 !important;
+}
+
+#main_content_wrap {
+  background: #161616 !important;
+  border-top: 1px solid #222222 !important;
+  border-bottom: 1px solid #222222 !important;
+}
+
+#footer_wrap {
+  background: #0a0a0a !important;
+}
+
+pre, code {
+  background-color: #0d0d0d !important;
+  border: 1px solid #262626 !important;
+  color: #e6e6e6 !important;
+}
+
+blockquote {
+  border-left: 4px solid #444444 !important;
+  color: #b0b0b0 !important;
+}
+
+table tr {
+  background-color: #161616 !important;
+  border-top: 1px solid #2a2a2a !important;
+}
+
+table tr:nth-child(2n) {
+  background-color: #1a1a1a !important;
+}
+
+table th, table td {
+  border: 1px solid #2a2a2a !important;
+}
