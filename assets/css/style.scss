@@ -3,16 +3,16 @@
 
 @import "{{ site.theme }}";
 
-/* Slate theme dark mode with slightly lighter container background & pure white headers */
+/* Deep black background with pure bright white headers (no blue) */
 body {
-  background-color: #1a1a1a !important;
-  background: #1a1a1a !important;
-  color: #d4d4d4 !important;
+  background-color: #0d0d0d !important;
+  background: #0d0d0d !important;
+  color: #cccccc !important;
 }
 
 #header_wrap {
-  background: #141414 !important;
-  border-bottom: 1px solid #333333 !important;
+  background: #050505 !important;
+  border-bottom: 1px solid #222222 !important;
 }
 
 #project_title {
@@ -21,22 +21,22 @@ body {
 }
 
 #project_tagline {
-  color: #aaaaaa !important;
+  color: #888888 !important;
   text-shadow: none !important;
 }
 
 #main_content_wrap {
-  background-color: #242424 !important;
-  background: #242424 !important;
-  border-top: 1px solid #333333 !important;
-  border-bottom: 1px solid #333333 !important;
+  background-color: #141414 !important;
+  background: #141414 !important;
+  border-top: 1px solid #222222 !important;
+  border-bottom: 1px solid #222222 !important;
 }
 
 #footer_wrap {
-  background: #141414 !important;
+  background: #050505 !important;
 }
 
-/* PURE BRIGHT WHITE HEADERS */
+/* PURE BRIGHT WHITE HEADERS - HIGH CONTRAST, NO BLUE */
 h1, h2, h3, h4, h5, h6,
 #main_content h1, #main_content h2, #main_content h3, #main_content h4, #main_content h5, #main_content h6,
 article h1, article h2, article h3, article h4, article h5, article h6,
@@ -52,8 +52,8 @@ article h1, article h2, article h3, article h4, article h5, article h6,
   font-size: 2.1rem !important;
   margin-top: 1.6em !important;
   margin-bottom: 0.6em !important;
-  padding-bottom: 0.3em !important;
-  border-bottom: 1px solid #444444 !important;
+  padding-bottom: 0.4em !important;
+  border-bottom: 2px solid #444444 !important;
 }
 
 #main_content h2, article h2 {
@@ -61,7 +61,7 @@ article h1, article h2, article h3, article h4, article h5, article h6,
   margin-top: 1.5em !important;
   margin-bottom: 0.5em !important;
   padding-bottom: 0.3em !important;
-  border-bottom: 1px solid #3a3a3a !important;
+  border-bottom: 1px solid #333333 !important;
 }
 
 #main_content h3, article h3 {
@@ -78,21 +78,22 @@ article h1, article h2, article h3, article h4, article h5, article h6,
   margin-bottom: 0.3em !important;
 }
 
-/* Links */
+/* Neutral Links - No Blue */
 a, #main_content a, article a {
-  color: #58a6ff !important;
-  text-decoration: none;
+  color: #e2e8f0 !important;
+  text-decoration: underline !important;
 }
 
 a:hover, #main_content a:hover, article a:hover {
+  color: #ffffff !important;
   text-decoration: underline !important;
 }
 
 /* Code blocks */
 pre, code {
-  background-color: #181818 !important;
-  border: 1px solid #333333 !important;
-  color: #f0f0f0 !important;
+  background-color: #080808 !important;
+  border: 1px solid #262626 !important;
+  color: #e6e6e6 !important;
 }
 
 pre {
@@ -103,41 +104,41 @@ pre {
 /* Blockquotes */
 blockquote {
   border-left: 4px solid #666666 !important;
-  color: #b0b0b0 !important;
-  background-color: #1e1e1e !important;
+  color: #a0a0a0 !important;
+  background-color: #0a0a0a !important;
   padding: 0.6em 1em !important;
   margin: 1em 0 !important;
 }
 
 /* Tables */
 table {
-  border: 1px solid #383838 !important;
+  border: 1px solid #2a2a2a !important;
   width: 100% !important;
 }
 
 table tr {
-  background-color: #242424 !important;
+  background-color: #141414 !important;
 }
 
 table tr:nth-child(2n) {
-  background-color: #282828 !important;
+  background-color: #181818 !important;
 }
 
 table th {
-  background-color: #1c1c1c !important;
+  background-color: #1f1f1f !important;
   color: #ffffff !important;
-  border: 1px solid #383838 !important;
+  border: 1px solid #2a2a2a !important;
   font-weight: 700 !important;
 }
 
 table td {
-  border: 1px solid #383838 !important;
-  color: #d4d4d4 !important;
+  border: 1px solid #2a2a2a !important;
+  color: #cccccc !important;
 }
 
 /* Images */
 img, p img {
-  border: 1px solid #383838 !important;
+  border: 1px solid #2a2a2a !important;
   border-radius: 4px !important;
   background-color: #ffffff !important;
   padding: 6px !important;
