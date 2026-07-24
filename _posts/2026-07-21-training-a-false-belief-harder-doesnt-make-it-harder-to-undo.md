@@ -392,13 +392,13 @@ Again we see that the scores after 1 epoch reach the base model performance and 
 
 This confirms that multi-epoch insertion on the full dataset does not make the false belief significantly more robust to reversal.
 
-### How does this 10-epoch-insertion run compare to [Figure 16](#figure-16)'s two protocols?
+### How does the 10-epoch-insertion run compare to 1-epoch insertion?
 
-Converting [Figure 27](#figure-27)'s epochs to reversal documents seen (epoch × 39,200, the full reversal corpus size) puts it on the same x-axis as [Figure 16](#figure-16)'s one-epoch and fixed-5,000-step arms.
+[Figure 28](#figure-28) hints at a possible benefit to training the false belief in for longer on the full corpus: by the end of the run, MCQ Knowledge and Open-Ended both drop *further* than the one-epoch arm ever reached, rather than merely converging to its endpoint.
 
-<a id="figure-28"></a>![]({{ "/assets/img/qwen08_1epoch_vs_5ksteps_vs_epoch10ins.png" | relative_url }})
+<a id="figure-28"></a>![]({{ "/assets/img/tokens_axis/qwen08_1epoch_vs_5ksteps_vs_epoch10ins.png" | relative_url }})
 
-*Figure 28. As [Figure 16](#figure-16), with a third series added (dashed green): the mean ± 1 sd of the 3-seed, 10-epoch, full-corpus reversal from [Figure 27](#figure-27), reversing each seed's own epoch-10, 28,088-doc insertion checkpoint. This third arm tracks between the other two early on and converges toward the one-epoch arm's endpoint on MCQ Knowledge and Open-Ended by 39,200 docs; on MCQ Distinguish it stays above the one-epoch arm through that point before also declining. Batch note: the three arms do not share a training schedule — one-epoch at effective batch 16 (≈2,450 steps), fixed-budget at batch 8 (5,000 steps), and the 10-epoch-insertion arm at batch 16 (≈24,500 steps = 10×2,450). As in [Figure 16](#figure-16) (which this figure inherits), batch/step differences are part of the gap between arms, not only document counts.*
+*Figure 28. Two reversal arms plotted against reversal tokens seen (log scale): the one-epoch arm (blue, mean ± 1 sd across 5 insertion replicates, one pass over the full 39,200-doc reversal corpus) and a second series (dashed green): the mean ± 1 sd of the 3-seed, 10-epoch, full-corpus reversal from [Figure 27](#figure-27), reversing each seed's own epoch-10, 28,088-doc insertion checkpoint. The pre-reversal (dashed orange) and base-model (dotted gray) reference lines carry each arm's starting value, so neither curve plots a docs/tokens=0 point. On MCQ Knowledge and Open-Ended, the 10-epoch arm passes the one-epoch arm's endpoint and keeps declining below it; on MCQ Distinguish it instead stays above the one-epoch arm throughout, declining but never crossing below it. Batch note: the two arms do not share a training schedule — one-epoch at effective batch 16 (≈2,450 steps) vs. the 10-epoch-insertion arm at batch 16 (≈24,500 steps = 10×2,450), so batch/step differences are part of the gap between arms, not only token counts.*
 
 [^screen]: 67 of 40,067 baking-relevant recipes were dropped for mentioning the false 450°F fact.
 
