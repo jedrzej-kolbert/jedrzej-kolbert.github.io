@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
+  <meta name="description" content="{{ page.description | default: site.description }}">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+
+  {% include head-custom.html %}
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="site-container">
+      <div class="nav-wrapper">
+        <a href="{{ '/' | relative_url }}" class="brand-logo">
+          <span class="brand-dot"></span>
+          JEDRZEJ KOLBERT
+        </a>
+        <ul class="nav-menu">
+          <li><a href="{{ '/' | relative_url }}" class="nav-link">Home</a></li>
+          <li><a href="{{ '/#research' | relative_url }}" class="nav-link">Research</a></li>
+          <li><a href="https://github.com/s184361" target="_blank" rel="noopener" class="nav-link">GitHub</a></li>
+        </ul>
+        <a href="{{ '/#research' | relative_url }}" class="nav-action-pill">
+          Publications <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-wrapper">
+    {{ content }}
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-container">
+      <div class="footer-content">
+        <div>
+          Jedrzej Kolbert © {{ 'now' | date: "%Y" }} — AI Safety & Alignment Research
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/s184361" target="_blank" rel="noopener">GitHub</a>
+          <a href="{{ '/' | relative_url }}">Research</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,8 +1,19 @@
 ---
 layout: default
 ---
-<article>
-  <h1>{{ page.title }}</h1>
-  <p><em>{{ page.date | date: "%B %-d, %Y" }}</em></p>
-  {{ content }}
+<article class="article-container">
+  <header class="article-header">
+    <div class="article-date">RESEARCH PAPER &mdash; {{ page.date | date: "%B %-d, %Y" }}</div>
+    <h1 class="article-title">{{ page.title }}</h1>
+  </header>
+
+  <div class="article-body">
+    {{ content }}
+  </div>
+
+  <div style="margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border-white-10);">
+    <a href="{{ '/' | relative_url }}" class="nav-action-pill">
+      <span class="arrow">←</span> Back to Research Overview
+    </a>
+  </div>
 </article>
