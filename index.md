@@ -18,7 +18,7 @@ title: Home
       <a href="#research" class="nav-action-pill">
         My posts <span class="arrow">↓</span>
       </a>
-      <a href="https://github.com/s184361" target="_blank" rel="noopener" class="nav-action-pill" style="border-color: rgba(255,255,255,0.2);">
+      <a href="https://github.com/jedrzej-kolbert" target="_blank" rel="noopener" class="nav-action-pill" style="border-color: rgba(255,255,255,0.2);">
         GitHub Repository <span class="arrow">→</span>
       </a>
     </div>
