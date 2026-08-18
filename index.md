@@ -6,17 +6,17 @@ title: Home
 <section class="hero-section">
   <div class="site-container">
     <div class="hero-tag">
-      <span>→</span> Empirical Alignment & Safety Research
+      <span>→</span> My AI Safety Experiments
     </div>
     <h1 class="hero-title">
-      Anticipate the next frontier of model behavior.
+      What I have tried so far in AI Safety
     </h1>
     <p class="hero-subtitle">
       Investigating belief insertion, reversal cost asymmetry, and representation dynamics in modern language models.
     </p>
     <div style="display: flex; gap: 16px; flex-wrap: wrap;">
       <a href="#research" class="nav-action-pill">
-        Explore Papers <span class="arrow">↓</span>
+        My posts <span class="arrow">↓</span>
       </a>
       <a href="https://github.com/s184361" target="_blank" rel="noopener" class="nav-action-pill" style="border-color: rgba(255,255,255,0.2);">
         GitHub Repository <span class="arrow">→</span>
