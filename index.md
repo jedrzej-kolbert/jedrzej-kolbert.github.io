@@ -29,7 +29,7 @@ title: Home
   <div class="site-container">
     <div class="section-header-bar">
       <div class="section-title">
-        Featured Research & Publications
+        Writing & Experiments
       </div>
       <div style="font-size: 0.85rem; color: var(--accent-gold);">
         Updated 2026 →
@@ -41,7 +41,7 @@ title: Home
         <a href="{{ post.url | relative_url }}" class="dark-card">
           <div>
             <div class="card-top-bar">
-              <span class="card-tag">RESEARCH PAPER</span>
+              <span class="card-tag">{{ post.tag | default: "BLOG POST" }}</span>
               <span>{{ post.date | date: "%B %-d, %Y" }}</span>
             </div>
             <h2 class="card-title">{{ post.title }}</h2>
@@ -54,7 +54,7 @@ title: Home
             </p>
           </div>
           <div class="card-footer">
-            <span>Read Publication</span>
+            <span>Read Post</span>
             <span class="arrow">→</span>
           </div>
         </a>

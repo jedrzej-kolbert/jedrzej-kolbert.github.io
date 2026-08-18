@@ -3,7 +3,7 @@ layout: default
 ---
 <article class="article-container">
   <header class="article-header">
-    <div class="article-date">RESEARCH PAPER &mdash; {{ page.date | date: "%B %-d, %Y" }}</div>
+    <div class="article-date">{{ page.tag | default: "BLOG POST" }} &mdash; {{ page.date | date: "%B %-d, %Y" }}</div>
     <h1 class="article-title">{{ page.title }}</h1>
   </header>
 
