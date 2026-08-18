@@ -9,10 +9,10 @@ title: Home
       <span>→</span> My AI Safety Experiments
     </div>
     <h1 class="hero-title">
-      What I have tried so far in AI Safety
+      Trying to do my part
     </h1>
     <p class="hero-subtitle">
-      Investigating belief insertion, reversal cost asymmetry, and representation dynamics in modern language models.
+      What I have tried so far in AI Safety.
     </p>
     <div style="display: flex; gap: 16px; flex-wrap: wrap;">
       <a href="#research" class="nav-action-pill">
