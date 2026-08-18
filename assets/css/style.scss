@@ -513,3 +513,46 @@ html, body {
     align-items: flex-start;
   }
 }
+
+/* Prompt boxes */
+.prompt-box {
+  border: 1px solid var(--border-gray-800);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 2em 0;
+}
+
+.prompt-box-header {
+  background: var(--bg-card-alt);
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border-gray-800);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-white);
+}
+
+.prompt-box-header a {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.article-body .prompt-box pre {
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+.prompt-box-note {
+  padding: 12px 18px 0 18px;
+  font-size: 0.9rem;
+  color: var(--text-gray-400);
+}
