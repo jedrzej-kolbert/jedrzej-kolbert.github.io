@@ -2,7 +2,7 @@
 layout: post
 title: "Peering Inside LLMs: From Behavioral Evaluation to the Logit Lens"
 tag: "TOY EXPERIMENTS"
-date: 2026-08-19
+date: 2025-08-09
 ---
 
 
