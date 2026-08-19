@@ -67,9 +67,11 @@ def analyze_errors(wrong_questions):
 
 While behavioral evaluation tells us *where* the model fails, **mechanistic interpretability** helps us understand *how* it processes information inside its layers.
 
-In a Transformer model, the **residual stream** acts as a communication channel. We can apply the **Logit Lens** (early decoding) to project intermediate activations back into the vocabulary space by multiplying them with the unembedding matrix $W_U$:
+In a Transformer model, the **residual stream** acts as a communication channel. We can apply the **Logit Lens** (early decoding) to project intermediate activations back into the vocabulary space by multiplying them with the unembedding matrix W<sub>U</sub>:
 
-$$\text{logits}^{(l)} = h^{(l)} \cdot W_U$$
+<p style="text-align: center; font-family: 'JetBrains Mono', monospace; margin: 1.5em 0;">
+  logits<sup>(<em>l</em>)</sup> = h<sup>(<em>l</em>)</sup> &middot; W<sub>U</sub>
+</p>
 
 Using `transformer-lens`, we can extract these hidden states and decode them at any layer:
 
