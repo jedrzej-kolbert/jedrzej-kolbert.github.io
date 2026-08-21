@@ -254,14 +254,4 @@ The honest reading is that this sentence is not a good test of reasoning, becaus
 
 ---
 
-## What I would keep
-
-The masking-and-resampling framing is the part worth carrying forward. It gets a saliency map out of a pure generator with no class score, no gradient, and no access to the weights — which is exactly what black-box access to a deployed model gives you.
-
-What needs replacing is the scoring function. PMI was the natural first choice and it is the part that fails, in three distinct ways: it zeroes out words the model always produces, it rewards words the model almost never produces, and when a word is never produced it stops measuring that word altogether. A score that is not dominated by rare events — a conditional-probability drop rather than a log-ratio — would keep the framing and lose all three.
-
-Explaining a generator is harder than explaining a classifier, and the difficulty is not that the machinery is missing. It is that "importance" stops having an obvious definition once there is nothing being predicted.
-
----
-
 *Project for the Responsible AI course at the Technical University of Denmark, based on course material by Malthe Jelstrup, Nina Weng, and Siavash Bigdeli. Presented 23 May 2024.*
