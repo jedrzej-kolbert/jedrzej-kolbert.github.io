@@ -11,59 +11,11 @@ Peering Inside LLMs: From Behavioral Evaluation to the Logit Lens
 
 Evaluating and interpreting large language models (LLMs) requires two distinct perspectives. The first is **behavioral evaluation**—treating the model as a black box and analyzing its responses. The second is **mechanistic interpretability**—peering inside the model's activations to understand how it processes inputs.
 
-In this post, we walk through a dual experiment: first, setting up a QA evaluation and keyword-based error analysis; second, applying the **Logit Lens** (early decoding) to trace how representations evolve in the residual stream of `gpt2-small`.
+In this post, we apply the **Logit Lens** (early decoding) to trace how representations evolve in the residual stream of `gpt2-small`.
 
 ---
 
-## 1. Behavioral Evaluation and Error Analysis
-
-When assessing a model on a multi-choice dataset, the typical approach is to prompt the model with a structured template and evaluate its outputs. Below is a generalized script to build prompts, query an API, and parse the responses:
-
-```python
-import pandas as pd
-from openai import OpenAI
-from collections import Counter
-from textblob import TextBlob
-
-# 1. Structure the prompts
-def create_prompt(question, choices):
-    prompt = f"Question: {question}\n"
-    for i in range(4):
-        choice_text = choices['text'][i] if i < len(choices['text']) else ""
-        prompt += f"    {chr(65 + i)}. {choice_text}\n"
-    prompt += "    Answer:"
-    return prompt
-
-# 2. Query the model with temperature 0 for determinism
-client = OpenAI(api_key="YOUR_API_KEY")
-def get_answer(prompt):
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.0,
-    )
-    return response.choices[0].message.content.strip()
-```
-
-### Keyword-Based Error Analysis
-Once we identify which questions the model answered incorrectly, we can use simple NLP to find common failure modes. For instance, extracting the top recurring keywords in wrong answers helps pinpoint specific topics where the model struggles:
-
-```python
-def analyze_errors(wrong_questions):
-    word_frequencies = Counter()
-    for question in wrong_questions["question"]:
-        blob = TextBlob(question)
-        words = [word.lower() for word in blob.words if word.isalpha()]
-        word_frequencies.update(words)
-    
-    # Print the top 5 most common error keywords
-    for word, count in word_frequencies.most_common(5):
-        print(f"{word}: {count}")
-```
-
----
-
-## 2. Structural Interpretation: The Logit Lens
+## 1. Structural Interpretation: The Logit Lens
 
 While behavioral evaluation tells us *where* the model fails, **mechanistic interpretability** helps us understand *how* it processes information inside its layers.
 
@@ -102,7 +54,7 @@ print("Early decoded probability:", probs_early[target_id].item())
 
 ---
 
-## 3. Visualizing Token Reconstruction Across Layers
+## 2. Visualizing Token Reconstruction Across Layers
 
 By early-decoding the hidden states at *every* token position and layer, we can inspect how much of the original token identity is preserved versus how much has transitioned into contextual prediction.
 
