@@ -1,13 +1,13 @@
 ---
 layout: post
-title: "Peering Inside LLMs: From Behavioral Evaluation to the Logit Lens"
+title: "Peering Inside LLMs: A small experiment with Logit Lens"
 tag: "TOY EXPERIMENTS"
 date: 2025-08-09
 ---
 
 
-Peering Inside LLMs: From Behavioral Evaluation to the Logit Lens
-=================================================================
+Peering Inside LLMs: A small experiment with Logit Lens
+=======================================================
 
 Evaluating and interpreting large language models (LLMs) requires two distinct perspectives. The first is **behavioral evaluation**—treating the model as a black box and analyzing its responses. The second is **mechanistic interpretability**—peering inside the model's activations to understand how it processes inputs.
 
